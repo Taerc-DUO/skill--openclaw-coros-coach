@@ -1,0 +1,21 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Config with secrets (users should never commit these)
+config.json
+auth.json
+*.local
+
+# Logs
+*.log
+
+# OpenClaw personal data
+.memory/
+agents/
