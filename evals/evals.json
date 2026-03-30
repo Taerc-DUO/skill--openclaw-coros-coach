@@ -1,0 +1,132 @@
+{
+  "skill_name": "coros-coach",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我看看这周 COROS 的训练负荷、恢复情况和跑步能力变化。我今天能不能跑？如果能跑，给我一个建议，但先不要创建课程。",
+      "expected_output": "应触发 coros-coach。读取 COROS 数据后给出训练状态分析和当天建议，明确不创建课程。",
+      "files": [],
+      "expectations": [
+        "The response analyzes current COROS metrics such as load, recovery, running fitness, or recent training state.",
+        "The response gives a concrete training recommendation for today.",
+        "The response explicitly avoids creating a course because the user said not to create one.",
+        "The response does not ask the user to paste tokens, cookies, or account credentials."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "我刚用高驰跑完一节 10 公里节奏跑，帮我复盘一下这次训练的配速、负荷和恢复影响，顺便看看这周后面怎么安排更合理。",
+      "expected_output": "应触发 coros-coach。基于最近活动和当前恢复状态做复盘与后续建议，不自动创建课程。",
+      "files": [],
+      "expectations": [
+        "The response performs a workout review using recent COROS activity data.",
+        "The response comments on pace, training load, recovery impact, or related training-state metrics.",
+        "The response includes a suggestion for the next few days or the rest of the week.",
+        "The response does not create a course unless the user explicitly asks for one."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "按我现在 COROS 的状态，帮我安排周三一节间歇课。先告诉我你准备怎么安排，别直接建到课程库。",
+      "expected_output": "应触发 coros-coach。先读取最新 COROS 数据，再判断当前状态是否适合上强度；如果负荷比偏低、训练量评估为训练不足或整体状态不支持间歇课，应明确降级为 E 跑/恢复跑建议或延后质量课，而不是硬给间歇草案。无论如何都不应直接创建课程。",
+      "files": [],
+      "expectations": [
+        "The response evaluates whether the current COROS state actually supports an interval session instead of assuming intensity is appropriate.",
+        "If the live load or training assessment indicates undertraining or a mismatch for quality work, the response explicitly downgrades to an easy or recovery recommendation, or delays the interval session.",
+        "If the current state does support an interval draft, the response includes workout structure details such as reps, distance or duration, and intensity target.",
+        "The response does not create or claim to create a course because the user asked for a draft first."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "我想周三跑一节 6x800m 的间歇课。按我当前 COROS 恢复和负荷状态帮我直接创建到 Training Hub 课程库，创建后帮我检查配速有没有被模板默认值覆盖。",
+      "expected_output": "应触发 coros-coach。先读取最新 COROS 数据，给出拟创建课程摘要，然后在已登录页面上下文中创建课程，并校验课程已创建且强度参数正确。",
+      "files": [],
+      "expectations": [
+        "The response reads or references current COROS recovery and load before creating the workout.",
+        "The response shows a workout summary before or while creating the course.",
+        "The response creates or clearly attempts to create the course in Training Hub because the user explicitly authorized it.",
+        "The response verifies whether the created workout pace settings were preserved rather than overwritten by template defaults.",
+        "If the created workout contains interval work and recovery repeats, the visible segment names should be explicit running labels such as 快跑 and 慢跑 rather than generic 训练 or drill-style names.",
+        "The response includes execution guidance about heart-rate feedback, especially that fast reps are pace-led while recovery reps should check whether heart rate falls back enough.",
+        "The response does not ask the user to paste tokens, cookies, or raw authentication headers."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "我这边 COROS Training Hub 好像掉登录了，你帮我看看为什么读不到数据，下一步我该怎么处理？",
+      "expected_output": "应触发 coros-coach。识别为登录态失效或未授权场景，要求用户在同一个 openclaw 浏览器 profile 中重新登录，不要求用户粘贴 token、cookie 或账号密码。",
+      "files": [],
+      "expectations": [
+        "The response identifies login-state expiry, missing authorization, or similar access failure as the likely cause.",
+        "The response instructs the user to re-login in the same openclaw browser profile.",
+        "The response does not ask the user to paste tokens, cookies, passwords, or console dumps into chat.",
+        "The response makes it clear that data access or course creation should be retried only after login is restored."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "我最近想备战半马，帮我安排一下每周训练，最好包含间歇、节奏跑和长距离。",
+      "expected_output": "不应因为普通跑步训练需求就强行触发 coros-coach；若被调用，也应先确认是否要基于 COROS 数据来安排，而不是假设已经有高驰数据。",
+      "files": [],
+      "expectations": [
+        "The response does not assume COROS data is available when the user did not mention COROS or Gaochi.",
+        "If the skill responds, it asks whether the plan should be based on COROS data or recent COROS status before making data-specific claims.",
+        "The response does not pretend to have read COROS metrics, recovery, or load values that were never provided.",
+        "The response does not create a Training Hub course from this prompt alone."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "按我当前 COROS 状态，帮我直接创建一节 E 跑 8km 到 Training Hub。创建前把课程结构说清楚。",
+      "expected_output": "应触发 coros-coach。按保守默认生成轻松跑结构，优先采用热身 + 主训练 + 放松，主段使用 E 配速区间，不要误设为 T 或 I 强度。",
+      "files": [],
+      "expectations": [
+        "The response reads or references current COROS status before building the workout.",
+        "The response presents a clear workout structure for an 8 km easy run before creation.",
+        "The response uses easy-run pacing rather than threshold or interval intensity for the main segment.",
+        "The response includes an easy-run or recovery heart-rate reference rather than only pace guidance.",
+        "The response creates or clearly attempts to create the course because the user explicitly authorized it.",
+        "The response does not require the user to provide tokens, cookies, or raw auth headers."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "按我现在的 COROS 状态给我设计一节 T 跑，主段 20 分钟。先别创建，先告诉我会怎么拆。",
+      "expected_output": "应触发 coros-coach。先判断当前 COROS 状态是否适合阈值训练；如果当前负荷状态不支持 T 跑，应明确给出轻量替代方案或建议延后质量课。如果状态允许，再保留用户给出的时间型阈值主段，默认拆成热身 + 阈值主段 + 放松。无论如何都不应创建课程。",
+      "files": [],
+      "expectations": [
+        "The response checks whether the current COROS state supports a threshold workout before drafting one.",
+        "If the current state does not support T work, the response offers an easier substitute or recommends delaying the threshold session.",
+        "If the current state does support T work, the response preserves the user's 20-minute threshold main segment rather than replacing it with an unrelated default distance.",
+        "If a T-workout draft is provided, the response proposes a warm-up, threshold main set, and cool-down structure and uses threshold pace or threshold-zone guidance for the main segment.",
+        "The response does not create a course because the user asked for a draft only."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "按我现在 COROS 的状态，直接帮我建一节间歇课到课程库。",
+      "expected_output": "应触发 coros-coach，但因为用户没有给组数、单组距离/时长和恢复结构，AI 应先追问或给草案，不应直接生成一个细节未经确认的间歇课写入课程库。",
+      "files": [],
+      "expectations": [
+        "The response recognizes that key interval details are missing, such as reps, rep distance or duration, or recovery structure.",
+        "The response asks a follow-up question or offers a draft interval structure for confirmation.",
+        "The response does not create or claim to create the interval course immediately from this underspecified request.",
+        "The response bases its caution on workout specificity rather than asking for tokens or technical auth data."
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "按我当前 COROS 状态，帮我直接创建一节 LSD 16km。创建前先说一下你准备怎么安排。",
+      "expected_output": "应触发 coros-coach。将 LSD 视为长距离慢跑，主段应使用 E 区间偏慢侧或恢复友好的长距离配速，不应默认混入阈值段或间歇段。",
+      "files": [],
+      "expectations": [
+        "The response presents a long-run structure appropriate for a 16 km LSD workout before creation.",
+        "The response uses easy-zone or slower-end easy pacing guidance rather than threshold or interval intensity.",
+        "The response does not insert threshold repeats or interval sets into the default LSD plan.",
+        "The response includes a low-intensity heart-rate reference for the long run rather than only pace guidance.",
+        "The response creates or clearly attempts to create the course only after summarizing the workout because the user explicitly authorized it."
+      ]
+    }
+  ]
+}
